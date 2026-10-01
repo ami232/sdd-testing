@@ -42,3 +42,8 @@ def test_password_without_lowercase_is_rejected():
 def test_password_without_digit_is_rejected():
     errors = validate_password("NoDigitsHere!")
     assert "Password must contain a digit" in errors
+
+
+def test_password_without_special_character_is_rejected():
+    errors = validate_password("NoSpecial1")
+    assert "Password must contain a special character" in errors

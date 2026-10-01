@@ -30,4 +30,6 @@ def validate_password(password: str) -> List[str]:
         errors.append("Password must contain a lowercase letter")
     if not any(c.isdigit() for c in password):
         errors.append("Password must contain a digit")
+    if not any(c in SPECIAL_CHARACTERS for c in password):
+        errors.append("Password must contain a special character")
     return errors
