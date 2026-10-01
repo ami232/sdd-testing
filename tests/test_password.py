@@ -18,8 +18,6 @@ list in order, and commit after each green step so your history shows the
 cycle.
 """
 
-import pytest
-
 from orderflow.password import validate_password
 
 
@@ -51,3 +49,19 @@ def test_password_without_special_character_is_rejected():
     """A password needs a character from the special-character set."""
     errors = validate_password("Abcdefg1")
     assert "Password must contain a special character" in errors
+
+
+def test_valid_password_returns_no_errors():
+    """A password that meets every rule is valid."""
+    assert validate_password("Abcdef1!") == []
+
+
+def test_password_breaking_several_rules_reports_all_of_them():
+    """Every broken rule is reported, not only the first."""
+    errors = validate_password("abc")
+    assert set(errors) == {
+        "Password must be at least 8 characters long",
+        "Password must contain an uppercase letter",
+        "Password must contain a digit",
+        "Password must contain a special character",
+    }
