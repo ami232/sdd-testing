@@ -23,3 +23,7 @@ from orderflow.password import validate_password
 
 def test_password_shorter_than_eight_characters_is_rejected():
     assert "Password must be at least 8 characters long" in validate_password("Ab1!")
+
+
+def test_password_without_uppercase_is_rejected():
+    assert "Password must contain an uppercase letter" in validate_password("abcdefg1!")
