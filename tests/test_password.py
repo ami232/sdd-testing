@@ -31,3 +31,7 @@ def test_password_without_uppercase_is_rejected():
 
 def test_password_without_lowercase_is_rejected():
     assert "Password must contain a lowercase letter" in validate_password("ABCDEFG1!")
+
+
+def test_password_without_digit_is_rejected():
+    assert "Password must contain a digit" in validate_password("Abcdefgh!")
