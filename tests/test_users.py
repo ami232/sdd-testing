@@ -12,24 +12,33 @@ class TestUserRepositoryIntegration:
     def database(self):
         """Provide a connected database, and close it again afterwards."""
         # TODO: Create a Database instance
+        db = Database()
         # TODO: Call connect() on the database
+        db.connect()
         # TODO: Use yield to hand the database to the test
+        yield db
         # TODO: After the yield, call disconnect() on the database
-        raise NotImplementedError("TODO: Implement this fixture")
+        db.disconnect()
 
     @pytest.fixture
     def user_repo(self, database):
         """Provide a UserRepository backed by the connected database."""
         # TODO: Create and return a UserRepository with the database fixture
-        raise NotImplementedError("TODO: Implement this fixture")
+        ur = UserRepository(database)
+        return ur
 
     def test_create_and_retrieve_user(self, user_repo):
         """Test creating and then reading back a user."""
         # TODO: Create a user with id="123", name="John Doe", email="john@example.com"
+        user = user_repo.create_user("123", "John Doe", "john@example.com")
         # TODO: Assert user['id'] == "123"
+        assert user["id"] == "123"
         # TODO: Assert user['name'] == "John Doe"
+        assert user["name"] == "John Doe"
         # TODO: Assert user['email'] == "john@example.com"
+        assert user["email"] == "john@example.com"
         # TODO: Assert 'created_at' is in user
+        assert "created_at" in user
 
         # TODO: Retrieve the user by id "123"
         # TODO: Assert the retrieved user is not None
