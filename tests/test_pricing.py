@@ -43,3 +43,11 @@ class TestCalculateTotalPrice:
         """Test that negative discount raises ValueError."""
         with pytest.raises(ValueError, match="must be between 0 and 100"):
             calculate_total_price(10.0, 5, discount_percent=-10)
+
+    def test_zero_discount_is_allowed(self):
+        """The lower discount bound is valid and changes nothing."""
+        assert calculate_total_price(10.0, 5, discount_percent=0) == 50.0
+
+    def test_full_discount_is_allowed(self):
+        """The upper discount bound is valid and makes the order free."""
+        assert calculate_total_price(10.0, 5, discount_percent=100) == 0.0
