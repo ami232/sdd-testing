@@ -85,6 +85,8 @@ class TestCalculateTotalPrice:
         # TODO: Use pytest.raises(ValueError, match="must be between 0 and 100")
         # TODO: Call calculate_total_price with discount=101
         #arrange
+        price = 10.0
+        quantity = 5
         discount_percent = 101
         #act
         with pytest.raises(ValueError, match="must be between 0 and 100"):
@@ -95,6 +97,8 @@ class TestCalculateTotalPrice:
         # TODO: Use pytest.raises(ValueError, match="must be between 0 and 100")
         # TODO: Call calculate_total_price with discount=-10
         #arrange
+        price = 10.0
+        quantity = 5
         discount_percent = -10
         #act
         with pytest.raises(ValueError, match="must be between 0 and 100"):
