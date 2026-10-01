@@ -6,9 +6,34 @@ Write a failing test first (red), then the smallest change that passes it
 (green), then tidy up (refactor). Repeat, one rule at a time.
 """
 
-from typing import List
+from typing import Callable, List
 
 SPECIAL_CHARACTERS = "!@#$%^&*()-_=+[]{};:,.<>?/"
+
+Rule = tuple[Callable[[str], bool], str]
+
+RULES: List[Rule] = [
+    (
+        lambda password: len(password) >= 8,
+        "Password must be at least 8 characters long",
+    ),
+    (
+        lambda password: any(character.isupper() for character in password),
+        "Password must contain an uppercase letter",
+    ),
+    (
+        lambda password: any(character.islower() for character in password),
+        "Password must contain a lowercase letter",
+    ),
+    (
+        lambda password: any(character.isdigit() for character in password),
+        "Password must contain a digit",
+    ),
+    (
+        lambda password: any(character in SPECIAL_CHARACTERS for character in password),
+        "Password must contain a special character",
+    ),
+]
 
 
 def validate_password(password: str) -> List[str]:
@@ -18,18 +43,5 @@ def validate_password(password: str) -> List[str]:
     Returns:
         A list of error messages, one per broken rule, in any order. An empty
         list means the password is valid.
-
-    The rules and their exact messages are listed in the README.
     """
-    errors = []
-    if len(password) < 8:
-        errors.append("Password must be at least 8 characters long")
-    if not any(character.isupper() for character in password):
-        errors.append("Password must contain an uppercase letter")
-    if not any(character.islower() for character in password):
-        errors.append("Password must contain a lowercase letter")
-    if not any(character.isdigit() for character in password):
-        errors.append("Password must contain a digit")
-    if not any(character in SPECIAL_CHARACTERS for character in password):
-        errors.append("Password must contain a special character")
-    return errors
+    return [message for is_met, message in RULES if not is_met(password)]
