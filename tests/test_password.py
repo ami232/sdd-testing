@@ -47,3 +47,16 @@ def test_password_without_digit_is_rejected():
 def test_password_without_special_character_is_rejected():
     errors = validate_password("NoSpecial1")
     assert "Password must contain a special character" in errors
+
+
+def test_valid_password_returns_no_errors():
+    errors = validate_password("Str0ng!Pass")
+    assert errors == []
+
+
+def test_password_breaking_several_rules_reports_all_of_them():
+    errors = validate_password("short")
+    assert "Password must be at least 8 characters long" in errors
+    assert "Password must contain an uppercase letter" in errors
+    assert "Password must contain a digit" in errors
+    assert "Password must contain a special character" in errors
