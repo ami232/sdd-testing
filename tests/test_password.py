@@ -45,3 +45,9 @@ def test_password_without_digit_is_rejected():
     """A password needs a digit."""
     errors = validate_password("Abcdefg!")
     assert "Password must contain a digit" in errors
+
+
+def test_password_without_special_character_is_rejected():
+    """A password needs a character from the special-character set."""
+    errors = validate_password("Abcdefg1")
+    assert "Password must contain a special character" in errors
