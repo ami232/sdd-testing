@@ -24,4 +24,6 @@ def validate_password(password: str) -> List[str]:
     errors = []
     if len(password) < 8:
         errors.append("Password must be at least 8 characters long")
+    if not any(character.isupper() for character in password):
+        errors.append("Password must contain an uppercase letter")
     return errors
