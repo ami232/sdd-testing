@@ -11,55 +11,51 @@ class TestUserRepositoryIntegration:
     @pytest.fixture
     def database(self):
         """Provide a connected database, and close it again afterwards."""
-        # TODO: Create a Database instance
-        # TODO: Call connect() on the database
-        # TODO: Use yield to hand the database to the test
-        # TODO: After the yield, call disconnect() on the database
-        raise NotImplementedError("TODO: Implement this fixture")
+        DB = Database()
+        DB.connect()
+        yield DB
+        DB.disconnect()
 
     @pytest.fixture
     def user_repo(self, database):
         """Provide a UserRepository backed by the connected database."""
-        # TODO: Create and return a UserRepository with the database fixture
-        raise NotImplementedError("TODO: Implement this fixture")
+        UR = UserRepository(database)
+        yield UR
 
     def test_create_and_retrieve_user(self, user_repo):
         """Test creating and then reading back a user."""
-        # TODO: Create a user with id="123", name="John Doe", email="john@example.com"
-        # TODO: Assert user['id'] == "123"
-        # TODO: Assert user['name'] == "John Doe"
-        # TODO: Assert user['email'] == "john@example.com"
-        # TODO: Assert 'created_at' is in user
+        user = user_repo.create_user(
+            user_id="123", name="John Doe", email="john@example.com"
+        )
+        assert user["id"] == "123"
+        assert user["name"] == "John Doe"
+        assert user["email"] == "john@example.com"
+        assert "created_at" in user
 
-        # TODO: Retrieve the user by id "123"
-        # TODO: Assert the retrieved user is not None
-        # TODO: Assert retrieved['id'] == "123"
-        # TODO: Assert retrieved['name'] == "John Doe"
-        assert False, "TODO: Implement this test"
+        user = user_repo.get_user(user_id="123")
+        assert user is not None
+        assert user["id"] == "123"
+        assert user["name"] == "John Doe"
 
     def test_create_user_with_invalid_email(self, user_repo):
         """Test that creating a user with an invalid email raises."""
-        # TODO: Use pytest.raises(ValueError, match="Invalid email")
-        # TODO: Try to create a user with email="invalid-email"
-        assert False, "TODO: Implement this test"
+        with pytest.raises(ValueError, match="Invalid email format"):
+            user_repo.create_user(user_id="123", name="John Doe", email="invalid-email")
 
     def test_get_nonexistent_user(self, user_repo):
         """Test retrieving a user that does not exist."""
-        # TODO: Get the user with id="999"
-        # TODO: Assert the result is None
-        assert False, "TODO: Implement this test"
+        user = user_repo.get_user(user_id="nonexistent")
+        assert user is None
 
     def test_database_not_connected_raises_error(self):
         """Test that operations fail when the database is not connected."""
-        # TODO: Create a Database instance and do NOT connect it
-        # TODO: Create a UserRepository with this database
-        # TODO: Use pytest.raises(ConnectionError, match="not connected")
-        # TODO: Try to create a user
-        assert False, "TODO: Implement this test"
+        DB = Database()  
+        UR = UserRepository(DB)
+        with pytest.raises(ConnectionError, match="Database not connected"):
+            UR.create_user(user_id="123", name="John Doe", email="john@example.com")
 
     def test_get_on_disconnected_database_raises_error(self):
         """Test that reads fail too, not only writes."""
-        # TODO: Create a UserRepository over an unconnected Database
-        # TODO: Use pytest.raises(ConnectionError, match="not connected")
-        # TODO: Try to read a user
-        assert False, "TODO: Implement this test"
+        UR = UserRepository(Database())
+        with pytest.raises(ConnectionError, match="Database not connected"):
+            UR.get_user(user_id="123")
