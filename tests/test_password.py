@@ -27,3 +27,7 @@ def test_password_shorter_than_eight_characters_is_rejected():
 
 def test_password_without_uppercase_is_rejected():
     assert "Password must contain an uppercase letter" in validate_password("abcdefg1!")
+
+
+def test_password_without_lowercase_is_rejected():
+    assert "Password must contain a lowercase letter" in validate_password("ABCDEFG1!")
