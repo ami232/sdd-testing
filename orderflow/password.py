@@ -10,6 +10,17 @@ from typing import List
 
 SPECIAL_CHARACTERS = "!@#$%^&*()-_=+[]{};:,.<>?/"
 
+_RULES = [
+    (lambda pw: len(pw) >= 8, "Password must be at least 8 characters long"),
+    (lambda pw: any(c.isupper() for c in pw), "Password must contain an uppercase letter"),
+    (lambda pw: any(c.islower() for c in pw), "Password must contain a lowercase letter"),
+    (lambda pw: any(c.isdigit() for c in pw), "Password must contain a digit"),
+    (
+        lambda pw: any(c in SPECIAL_CHARACTERS for c in pw),
+        "Password must contain a special character",
+    ),
+]
+
 
 def validate_password(password: str) -> List[str]:
     """
@@ -21,4 +32,4 @@ def validate_password(password: str) -> List[str]:
 
     The rules and their exact messages are listed in the README.
     """
-    raise NotImplementedError("Exercise 6: build this with TDD")
+    return [message for passes, message in _RULES if not passes(password)]
