@@ -11,15 +11,16 @@ class TestUserRepositoryIntegration:
     @pytest.fixture
     def database(self):
         """Provide a connected database, and close it again afterwards."""
-        # TODO: Create a Database instance
-        # TODO: Call connect() on the database
-        # TODO: Use yield to hand the database to the test
-        # TODO: After the yield, call disconnect() on the database
+        database = Database()
+        database.connect()
+        yield database
+        database.disconnect()
         raise NotImplementedError("TODO: Implement this fixture")
 
     @pytest.fixture
     def user_repo(self, database):
         """Provide a UserRepository backed by the connected database."""
+        
         # TODO: Create and return a UserRepository with the database fixture
         raise NotImplementedError("TODO: Implement this fixture")
 
