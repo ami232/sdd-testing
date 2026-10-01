@@ -21,4 +21,7 @@ def validate_password(password: str) -> List[str]:
 
     The rules and their exact messages are listed in the README.
     """
-    raise NotImplementedError("Exercise 6: build this with TDD")
+    errors = []
+    if len(password) < 8:
+        errors.append("Password must be at least 8 characters long")
+    return errors
