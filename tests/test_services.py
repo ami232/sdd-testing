@@ -18,50 +18,51 @@ class TestWeatherServiceMocking:
     @patch("requests.get")
     def test_get_temperature_success(self, mock_get):
         """Test reading the temperature out of a mocked API response."""
-        # TODO: Create a Mock() object for the response
-        # TODO: Set mock_response.json.return_value = {'temperature': 25.5}
-        # TODO: Set mock_response.raise_for_status.return_value = None
-        # TODO: Set mock_get.return_value = mock_response
+        mock_response = Mock()
+        mock_response.json.return_value = {"temperature": 25.5}
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
 
-        # TODO: Create a WeatherService with api_key="test"
-        # TODO: Call get_temperature("London")
+        service = WeatherService(api_key="test")
+        temperature = service.get_temperature("London")
 
-        # TODO: Assert the temperature equals 25.5
-        # TODO: Assert mock_get was called once with the right URL and params
-        assert False, "TODO: Implement this test"
+        assert temperature == 25.5
+        mock_get.assert_called_once_with(
+            "https://api.weather.com/current",
+            params={"city": "London", "key": "test"},
+        )
 
     @patch("requests.get")
     def test_is_good_weather_true(self, mock_get):
         """Test good weather detection (temp > 20)."""
-        # TODO: Create a Mock() for the response
-        # TODO: Set the json return value with temperature: 25.0
-        # TODO: Set mock_get.return_value
+        mock_response = Mock()
+        mock_response.json.return_value = {"temperature": 25.0}
+        mock_get.return_value = mock_response
 
-        # TODO: Create a WeatherService instance
-        # TODO: Call is_good_weather("Paris")
-        # TODO: Assert the result is True
-        assert False, "TODO: Implement this test"
+        service = WeatherService()
+
+        assert service.is_good_weather("Paris") is True
 
     @patch("requests.get")
     def test_is_good_weather_false(self, mock_get):
         """Test bad weather detection (temp <= 20)."""
-        # TODO: Create a mock response with temperature: 15.0
-        # TODO: Set mock_get.return_value
+        mock_response = Mock()
+        mock_response.json.return_value = {"temperature": 15.0}
+        mock_get.return_value = mock_response
 
-        # TODO: Create a WeatherService instance
-        # TODO: Call is_good_weather("Berlin")
-        # TODO: Assert the result is False
-        assert False, "TODO: Implement this test"
+        service = WeatherService()
+
+        assert service.is_good_weather("Berlin") is False
 
     @patch("requests.get")
     def test_api_error_handling(self, mock_get):
         """Test that an API failure propagates."""
-        # TODO: Set mock_get.side_effect to raise requests.exceptions.RequestException
+        mock_get.side_effect = requests.exceptions.RequestException("API down")
 
-        # TODO: Create a WeatherService instance
-        # TODO: Use pytest.raises to expect RequestException
-        # TODO: Call get_temperature("Tokyo")
-        assert False, "TODO: Implement this test"
+        service = WeatherService()
+
+        with pytest.raises(requests.exceptions.RequestException):
+            service.get_temperature("Tokyo")
 
 
 class TestWeatherServiceConfig:
@@ -74,17 +75,19 @@ class TestWeatherServiceConfig:
 
     def test_from_env_reads_api_key(self, monkeypatch):
         """Test that from_env picks up WEATHER_API_KEY."""
-        # TODO: Use monkeypatch.setenv to set WEATHER_API_KEY to "key-from-env"
-        # TODO: Build a service with WeatherService.from_env()
-        # TODO: Assert service.api_key == "key-from-env"
-        assert False, "TODO: Implement this test"
+        monkeypatch.setenv("WEATHER_API_KEY", "key-from-env")
+
+        service = WeatherService.from_env()
+
+        assert service.api_key == "key-from-env"
 
     def test_from_env_falls_back_to_demo_key(self, monkeypatch):
         """Test the default when the variable is not set at all."""
-        # TODO: Use monkeypatch.delenv with raising=False to remove WEATHER_API_KEY
-        # TODO: Build a service with WeatherService.from_env()
-        # TODO: Assert service.api_key == "demo"
-        assert False, "TODO: Implement this test"
+        monkeypatch.delenv("WEATHER_API_KEY", raising=False)
+
+        service = WeatherService.from_env()
+
+        assert service.api_key == "demo"
 
 
 class TestOrderProcessorMocking:
