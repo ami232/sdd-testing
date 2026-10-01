@@ -23,9 +23,7 @@ class TestPytestFeatures:
         self, price, quantity, discount, expected
     ):
         """Test multiple pricing scenarios from one test body."""
-        # TODO: Call calculate_total_price with price, quantity, discount
-        # TODO: Assert the result equals expected
-        assert False, "TODO: Implement this test"
+        assert calculate_total_price(price, quantity, discount) == expected
 
     @pytest.mark.parametrize(
         "email,expected",
@@ -36,11 +34,11 @@ class TestPytestFeatures:
             ("no-at-sign.com", False),
             ("@example.com", False),
             ("user@", False),
+            ("user@example", False),
+            ("user@@example.com", False),
             ("", False),
         ],
     )
     def test_validate_email_parametrized(self, email, expected):
         """Test email validation with multiple cases."""
-        # TODO: Call validate_email with email
-        # TODO: Assert the result equals expected
-        assert False, "TODO: Implement this test"
+        assert validate_email(email) is expected
