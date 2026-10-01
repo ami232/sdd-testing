@@ -27,3 +27,8 @@ def test_password_shorter_than_eight_characters_is_rejected():
     """RED first: start here, with the length rule and nothing else."""
     errors = validate_password("Ab1!")
     assert "Password must be at least 8 characters long" in errors
+
+
+def test_password_without_uppercase_is_rejected():
+    errors = validate_password("lowercase1!")
+    assert "Password must contain an uppercase letter" in errors
