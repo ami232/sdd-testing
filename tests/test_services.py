@@ -19,49 +19,70 @@ class TestWeatherServiceMocking:
     def test_get_temperature_success(self, mock_get):
         """Test reading the temperature out of a mocked API response."""
         # TODO: Create a Mock() object for the response
+        mock_response = Mock()
         # TODO: Set mock_response.json.return_value = {'temperature': 25.5}
+        mock_response.json.return_value = {'temperature': 25.5}
         # TODO: Set mock_response.raise_for_status.return_value = None
+        mock_response.raise_for_status.return_value = None
         # TODO: Set mock_get.return_value = mock_response
+        mock_get.return_value = mock_response
 
         # TODO: Create a WeatherService with api_key="test"
+        weather_service = WeatherService(api_key="test")
         # TODO: Call get_temperature("London")
+        temperature = weather_service.get_temperature("London")
 
         # TODO: Assert the temperature equals 25.5
+        assert temperature == 25.5
         # TODO: Assert mock_get was called once with the right URL and params
-        assert False, "TODO: Implement this test"
+        assert mock_get.call_count == 1
+        assert mock_get.call_args[0][0] == "https://api.weather.com/current"
+        assert mock_get.call_args[0][1] == {'city': 'London', 'key': 'test'}
 
     @patch("requests.get")
     def test_is_good_weather_true(self, mock_get):
         """Test good weather detection (temp > 20)."""
         # TODO: Create a Mock() for the response
+        mock_response = Mock()
         # TODO: Set the json return value with temperature: 25.0
+        mock_response.json.return_value = {'temperature': 25.0}
         # TODO: Set mock_get.return_value
+        mock_get.return_value = mock_response
 
         # TODO: Create a WeatherService instance
+        weather_service = WeatherService(api_key="test")
         # TODO: Call is_good_weather("Paris")
+        is_good_weather = weather_service.is_good_weather("Paris")
         # TODO: Assert the result is True
-        assert False, "TODO: Implement this test"
+        assert is_good_weather is True
 
     @patch("requests.get")
     def test_is_good_weather_false(self, mock_get):
         """Test bad weather detection (temp <= 20)."""
         # TODO: Create a mock response with temperature: 15.0
+        mock_response = Mock()
+        mock_response.json.return_value = {'temperature': 15.0}
         # TODO: Set mock_get.return_value
-
+        mock_get.return_value = mock_response
         # TODO: Create a WeatherService instance
+        weather_service = WeatherService(api_key="test")
         # TODO: Call is_good_weather("Berlin")
+        is_good_weather = weather_service.is_good_weather("Berlin")
         # TODO: Assert the result is False
-        assert False, "TODO: Implement this test"
+        assert is_good_weather is False
+     
 
     @patch("requests.get")
     def test_api_error_handling(self, mock_get):
         """Test that an API failure propagates."""
         # TODO: Set mock_get.side_effect to raise requests.exceptions.RequestException
-
+        mock_get.side_effect = requests.exceptions.RequestException
         # TODO: Create a WeatherService instance
+        weather_service = WeatherService(api_key="test")
         # TODO: Use pytest.raises to expect RequestException
+        with pytest.raises(requests.exceptions.RequestException):
+            weather_service.get_temperature("Tokyo")
         # TODO: Call get_temperature("Tokyo")
-        assert False, "TODO: Implement this test"
 
 
 class TestWeatherServiceConfig:
@@ -75,16 +96,20 @@ class TestWeatherServiceConfig:
     def test_from_env_reads_api_key(self, monkeypatch):
         """Test that from_env picks up WEATHER_API_KEY."""
         # TODO: Use monkeypatch.setenv to set WEATHER_API_KEY to "key-from-env"
+        monkeypatch.setenv("WEATHER_API_KEY", "key-from-env")
         # TODO: Build a service with WeatherService.from_env()
+        weather_service = WeatherService.from_env()
         # TODO: Assert service.api_key == "key-from-env"
-        assert False, "TODO: Implement this test"
+        assert weather_service.api_key == "key-from-env"
 
     def test_from_env_falls_back_to_demo_key(self, monkeypatch):
         """Test the default when the variable is not set at all."""
         # TODO: Use monkeypatch.delenv with raising=False to remove WEATHER_API_KEY
+        monkeypatch.delenv("WEATHER_API_KEY", raising=False)
         # TODO: Build a service with WeatherService.from_env()
+        weather_service = WeatherService.from_env()
         # TODO: Assert service.api_key == "demo"
-        assert False, "TODO: Implement this test"
+        assert weather_service.api_key == "demo"
 
 
 class TestOrderProcessorMocking:
@@ -93,19 +118,25 @@ class TestOrderProcessorMocking:
     def test_process_order_with_good_weather(self, customer_email):
         """Test order processing with both collaborators mocked."""
         # TODO: Create Mock(spec=WeatherService)
+        mock_weather = Mock(spec=WeatherService)
         # TODO: Set is_good_weather.return_value = True
-
+        mock_weather.is_good_weather.return_value = True
         # TODO: Create Mock(spec=NotificationService)
+        mock_notification = Mock(spec=NotificationService)
         # TODO: Set send_email.return_value = True
-
+        mock_notification.send_email.return_value = True
         # TODO: Create an OrderProcessor with both mocks
+        order_processor = OrderProcessor(mock_weather, mock_notification)
         # TODO: Call process_order("ORD-001", customer_email, "Madrid")
-
+        result = order_processor.process_order("ORD-001", customer_email, "Madrid")
         # TODO: Assert result['order_id'] == "ORD-001"
+        assert result['order_id'] == "ORD-001"
         # TODO: Assert result['notification_sent'] is True
+        assert result['notification_sent'] is True
         # TODO: Assert result['is_good_weather'] is True
-
+        assert result['is_good_weather'] is True
         # TODO: Assert is_good_weather was called once with "Madrid"
+        assert mock_weather.is_good_weather.call_count == 1
         # TODO: Assert send_email was called once
         # TODO: Assert the email body contains "Enjoy the nice weather"
         assert False, "TODO: Implement this test"
