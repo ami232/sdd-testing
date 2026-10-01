@@ -18,17 +18,24 @@ class TestWeatherServiceMocking:
     @patch("requests.get")
     def test_get_temperature_success(self, mock_get):
         """Test reading the temperature out of a mocked API response."""
+        mocky = Mock()
+        mocky.json.return_value = {"temperature": 25.5}
+        mocky.raise_for_status.return_value = None
+        mock_get.return_value = mocky
         # TODO: Create a Mock() object for the response
         # TODO: Set mock_response.json.return_value = {'temperature': 25.5}
         # TODO: Set mock_response.raise_for_status.return_value = None
         # TODO: Set mock_get.return_value = mock_response
-
+        weather= WeatherService(api_key="test")
+        temperature = weather.get_temperature("London")
         # TODO: Create a WeatherService with api_key="test"
         # TODO: Call get_temperature("London")
-
-        # TODO: Assert the temperature equals 25.5
-        # TODO: Assert mock_get was called once with the right URL and params
-        assert False, "TODO: Implement this test"
+        assert temperature == 25.5
+        assert mock_get.call_count == 1
+        mock_get.assert_called_once_with(
+            "https://api.weather.com/current",
+            params={"city": "London", "key": "test"},
+        )
 
     @patch("requests.get")
     def test_is_good_weather_true(self, mock_get):
