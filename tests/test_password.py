@@ -30,6 +30,36 @@ def test_password_shorter_than_eight_characters_is_rejected():
 
     assert result == ['Password must be at least 8 characters long']
 
+def test_password_requires_uppercase():
+    """RED first: start here, with the length rule and nothing else."""
+    
+    result = validate_password('abcdef1!')
+
+    assert result == ['Password must contain an uppercase letter']
+
+def test_password_requires_lowercase():
+    """RED first: start here, with the length rule and nothing else."""
+    
+    result = validate_password('ABCDEF1!')
+
+    assert result == ['Password must contain a lowercase letter']
+
+def test_password_requires_digit():
+    """RED first: start here, with the length rule and nothing else."""
+    
+    result = validate_password('Abcdefg!')
+
+    assert result == ['Password must contain a digit']
+
+def test_password_requires_sepcial_character():
+    """RED first: start here, with the length rule and nothing else."""
+    
+    result = validate_password('Abcdefg1')
+
+    assert result == ['Password must contain a special character.']
+
+
+
 # TODO: Add one test per remaining rule from the README, in order:
 # TODO:   uppercase, lowercase, digit, special character
 # TODO: Then add a test that a fully valid password returns an empty list.
