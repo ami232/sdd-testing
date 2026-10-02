@@ -10,9 +10,6 @@ class TestCalculateTotalPrice:
 
     def test_basic_calculation_no_discount(self):
         """Test basic price calculation without discount."""
-        # TODO: Call calculate_total_price with price=10.0, quantity=5
-        # TODO: Assert the result equals 50.0
-
         price = 10.0
         quantity = 5
 

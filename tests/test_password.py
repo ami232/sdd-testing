@@ -72,9 +72,3 @@ def test_password_reports_all_broken_rules():
         'Password must contain a digit',
         'Password must contain a special character'
     }
-
-# TODO: Add one test per remaining rule from the README, in order:
-# TODO:   uppercase, lowercase, digit, special character
-# TODO: Then add a test that a fully valid password returns an empty list.
-# TODO: Finally, add a test that a password breaking several rules at once
-# TODO: reports every broken rule, not just the first.
