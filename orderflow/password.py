@@ -35,5 +35,8 @@ def validate_password(password: str) -> List[str]:
 
     if not any(char.isdigit() for char in password):
         errors.append('Password must contain a digit')
-    
+
+    if not any(char in SPECIAL_CHARACTERS for char in password):
+        errors.append('Password must contain a special character')
+
     return errors
