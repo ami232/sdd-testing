@@ -22,7 +22,6 @@ import pytest
 
 from orderflow.password import validate_password
 
-
 def test_password_shorter_than_eight_characters_is_rejected():
     """RED first: start here, with the length rule and nothing else."""
     
@@ -58,7 +57,21 @@ def test_password_requires_sepcial_character():
 
     assert result == ['Password must contain a special character']
 
+def test_valid_password_has_no_errors():
+    result = validate_password(password='Abcdef1!')
 
+    assert result == []
+
+def test_password_reports_all_broken_rules():
+    result = validate_password(password='')
+
+    assert set(result) == {
+        'Password must be at least 8 characters long',
+        'Password must contain an uppercase letter',
+        'Password must contain a lowercase letter',
+        'Password must contain a digit',
+        'Password must contain a special character'
+    }
 
 # TODO: Add one test per remaining rule from the README, in order:
 # TODO:   uppercase, lowercase, digit, special character
