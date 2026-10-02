@@ -56,7 +56,7 @@ def test_password_requires_sepcial_character():
     
     result = validate_password('Abcdefg1')
 
-    assert result == ['Password must contain a special character.']
+    assert result == ['Password must contain a special character']
 
 
 
