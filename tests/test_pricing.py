@@ -10,48 +10,81 @@ class TestCalculateTotalPrice:
 
     def test_basic_calculation_no_discount(self):
         """Test basic price calculation without discount."""
-        # TODO: Call calculate_total_price with price=10.0, quantity=5
-        # TODO: Assert the result equals 50.0
-        assert False, "TODO: Implement this test"
+        price = 10.0
+        quantity = 5
+
+        result = calculate_total_price(price=price, quantity=quantity)
+
+        assert result == 50
 
     def test_calculation_with_discount(self):
         """Test price calculation with discount."""
-        # TODO: Call calculate_total_price with price=100.0, quantity=2, discount=10
-        # TODO: Assert the result equals 180.0 (200 - 20)
-        assert False, "TODO: Implement this test"
+        price = 100.0
+        quantity = 2
+        discount = 10
+
+        result = calculate_total_price(
+            price = price,
+            quantity=quantity,
+            discount_percent=discount
+        )
+
+        assert result == float(200 - 20) # 180d
 
     def test_calculation_with_50_percent_discount(self):
         """Test with 50% discount."""
-        # TODO: Call calculate_total_price with price=50.0, quantity=4, discount=50
-        # TODO: Assert the result equals 100.0 (200 - 100)
-        assert False, "TODO: Implement this test"
+        price = 50.0
+        quantity = 4
+        discount = 50
+
+        result = calculate_total_price(
+            price = price,
+            quantity=quantity,
+            discount_percent=discount
+        )
+
+        assert result == float(200 - 100)
 
     def test_zero_quantity(self):
         """Test with zero quantity."""
-        # TODO: Call calculate_total_price with price=10.0, quantity=0
-        # TODO: Assert the result equals 0.0
-        assert False, "TODO: Implement this test"
+        price = 10.0
+        quantity = 0
+
+        result = calculate_total_price(price = price, quantity=quantity)
+
+        assert result == 0.0
 
     def test_negative_price_raises_error(self):
         """Test that negative price raises ValueError."""
-        # TODO: Use pytest.raises(ValueError, match="must be non-negative")
-        # TODO: Call calculate_total_price with price=-10.0, quantity=5
-        assert False, "TODO: Implement this test"
+        price = -10.0
+        quantity = 5
+
+        with pytest.raises(ValueError, match='must be non-negative'):
+            calculate_total_price(price=price,quantity=quantity)
 
     def test_negative_quantity_raises_error(self):
         """Test that negative quantity raises ValueError."""
-        # TODO: Use pytest.raises(ValueError, match="must be non-negative")
-        # TODO: Call calculate_total_price with price=10.0, quantity=-5
-        assert False, "TODO: Implement this test"
+        price = 10.0
+        quantity = -5
+
+        with pytest.raises(ValueError, match='must be non-negative'):
+            calculate_total_price(price=price,quantity=quantity)
 
     def test_invalid_discount_over_100(self):
         """Test that discount over 100 raises ValueError."""
-        # TODO: Use pytest.raises(ValueError, match="must be between 0 and 100")
-        # TODO: Call calculate_total_price with discount=101
-        assert False, "TODO: Implement this test"
+        price = 10.0
+        quantity = 5
+        discount = 101
+
+        with pytest.raises(ValueError, match='must be between 0 and 100'):
+            calculate_total_price(price=price,quantity=quantity, discount_percent=discount)
 
     def test_invalid_discount_negative(self):
         """Test that negative discount raises ValueError."""
-        # TODO: Use pytest.raises(ValueError, match="must be between 0 and 100")
-        # TODO: Call calculate_total_price with discount=-10
-        assert False, "TODO: Implement this test"
+
+        price = 10.0
+        quantity = 5
+        discount = -10
+
+        with pytest.raises(ValueError, match='must be between 0 and 100'):
+            calculate_total_price(price=price,quantity=quantity, discount_percent=discount)
